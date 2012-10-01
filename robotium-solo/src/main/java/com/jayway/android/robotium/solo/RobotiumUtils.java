@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-import junit.framework.Assert;
 import android.app.Instrumentation;
 import android.graphics.Bitmap;
 import android.os.Environment;
@@ -22,7 +21,6 @@ import android.widget.TextView;
 class RobotiumUtils {
 	
 	private final Instrumentation inst;
-	private final Sleeper sleeper;
 	private final ActivityUtils activityUtils;
 	private final String LOG_TAG = "Robotium";
 
@@ -33,26 +31,27 @@ class RobotiumUtils {
      * @param sleeper the {@code Sleeper} instance.
      */
 	
-	public RobotiumUtils(Instrumentation inst, ActivityUtils activityUtils, Sleeper sleeper) {
+	public RobotiumUtils(Instrumentation inst, ActivityUtils activityUtils) {
 		this.inst = inst;
 		this.activityUtils = activityUtils;
-        this.sleeper = sleeper;
     }
    
 	/**
 	 * Tells Robotium to send a key code: Right, Left, Up, Down, Enter or other.
-	 * @param keycode the key code to be sent. Use {@link KeyEvent#KEYCODE_ENTER}, {@link KeyEvent#KEYCODE_MENU}, {@link KeyEvent#KEYCODE_DEL}, {@link KeyEvent#KEYCODE_DPAD_RIGHT} and so on...
+	 * <p>
+	 * Uses {@link Instrumentation#sendCharacterSync(int)} under the hood. Waits
+	 * for the UI thread to fall idle before returning.
 	 * 
+	 * @param keycode
+	 *            the key code to be sent. Use {@link KeyEvent#KEYCODE_ENTER},
+	 *            {@link KeyEvent#KEYCODE_MENU}, {@link KeyEvent#KEYCODE_DEL},
+	 *            {@link KeyEvent#KEYCODE_DPAD_RIGHT} and so on...
+	 * 
+	 * @throws RuntimeException if there was an error sending the key code.
 	 */
-	
-	public void sendKeyCode(int keycode)
-	{
-		sleeper.sleep();
-		try{
-			inst.sendCharacterSync(keycode);
-		}catch(SecurityException e){
-			Assert.assertTrue("Can not complete action!", false);
-		}
+	public void sendKeyCode(int keycode) {
+		inst.sendCharacterSync(keycode);
+		inst.waitForIdleSync();
 	}
 	
 	/**
