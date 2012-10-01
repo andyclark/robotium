@@ -39,7 +39,6 @@ class Clicker {
 	private final Sleeper sleeper;
 	private final Waiter waiter;
 	private final int TIMEOUT = 10000;
-	private final int MINISLEEP = 100;
 	Set<TextView> uniqueTextViews;
 
 
@@ -86,7 +85,7 @@ class Clicker {
 		try{
 			inst.sendPointerSync(event);
 			inst.sendPointerSync(event2);
-			sleeper.sleep(MINISLEEP);
+			inst.waitForIdleSync();
 		}catch(SecurityException e){
 			Assert.assertTrue("Click can not be completed!", false);
 		}
@@ -123,7 +122,7 @@ class Clicker {
 		eventTime = SystemClock.uptimeMillis();
 		event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_UP, x, y, 0);
 		inst.sendPointerSync(event);
-		sleeper.sleep();
+		inst.waitForIdleSync();
 
 	}
 
@@ -200,9 +199,9 @@ class Clicker {
 
 	public void clickOnMenuItem(String text)
 	{	
-		sleeper.sleep();
 		try{
 			robotiumUtils.sendKeyCode(KeyEvent.KEYCODE_MENU);
+			// TODO: Wait for menu to appear?
 		}catch(SecurityException e){
 			Assert.assertTrue("Can not open the menu!", false);
 		}
@@ -219,7 +218,6 @@ class Clicker {
 
 	public void clickOnMenuItem(String text, boolean subMenu)
 	{
-		sleeper.sleep();
 		TextView textMore = null;
 		int [] xy = new int[2];
 		int x = 0;
