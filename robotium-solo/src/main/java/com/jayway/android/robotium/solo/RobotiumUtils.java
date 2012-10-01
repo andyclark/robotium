@@ -56,16 +56,14 @@ class RobotiumUtils {
 	}
 	
 	/**
-	 * Simulates pressing the hardware back key.
+	 * Simulates pressing the hardware back key, without any pause before or 
+	 * after.
 	 *
 	 */
 
 	public void goBack() {
-		sleeper.sleep();
-		try {
-			inst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
-			sleeper.sleep();
-		} catch (Throwable ignored) {}
+		inst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
+		inst.waitForIdleSync();
 	}
 
 	/**
