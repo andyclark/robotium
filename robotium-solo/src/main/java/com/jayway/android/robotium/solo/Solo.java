@@ -66,6 +66,7 @@ import android.app.Instrumentation.ActivityMonitor;
 
 public class Solo {
 
+	protected final Instrumentation inst;
 	protected final Asserter asserter;
 	protected final ViewFetcher viewFetcher;
 	protected final Checker checker;
@@ -106,6 +107,7 @@ public class Solo {
 	 */
 
 	public Solo(Instrumentation instrumentation, Activity activity) {
+		this.inst = instrumentation;
         this.sleeper = new Sleeper();
         this.activityUtils = new ActivityUtils(instrumentation, activity, sleeper);
         this.viewFetcher = new ViewFetcher(activityUtils);
@@ -143,6 +145,10 @@ public class Solo {
 	
 	public ActivityMonitor getActivityMonitor(){
 		return activityUtils.getActivityMonitor();
+	}
+	
+	public Instrumentation getInstrumentation() {
+		return inst;
 	}
 
 	/**
